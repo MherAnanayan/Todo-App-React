@@ -1,0 +1,17 @@
+
+.App {
+    margin: auto;
+    .ant-list-pagination {
+        margin-top: 24px;
+        text-align: center;
+    };
+    .ant-pagination-item-active {
+        border-color: rgb(0, 255, 85);
+    };
+    .ant-pagination-item-active:focus,
+    .ant-pagination-item-active:hover {
+        border-color: #3ae923;
+
+    }
+
+}
