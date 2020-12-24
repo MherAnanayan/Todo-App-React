@@ -15,7 +15,6 @@ const Todo = ({ onDelete, id, title, name, email, status, isAdmin, todoArray, ch
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [admin, setAdmin] = useState(isAdmin)
     
-console.log(id)
 
     useEffect(()=> {
         setAdmin(isAdmin)

@@ -20,7 +20,6 @@ export const addTodoData = (todoData) => async(dispatch) => {
 export const getTodoData = (todoData) => async(dispatch) => {
 
     const val = todoData.map(el => el[1]);
-    console.log(val);
     dispatch({type: GET_DATA, val});
 };
 export const adminLogin = (todoData) => async(dispatch) => {
@@ -53,7 +52,7 @@ export const changeTodo = (todo) => async (dispatch) => {
 };
 
 export const editLocalTodo = (todoData) => async (dispatch) => {
-    await axios.put(`${url}/todos/.json`, JSON.stringify(todoData))
     
+    await axios.post(`${url}/todos/.json`, JSON.stringify(todoData))
     dispatch({ type: EDIT_LOCAL_TODO , todoData })
 };

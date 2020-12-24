@@ -57,6 +57,7 @@ const rootReducer = (state = Initial_State, action) => {
                 loading: false,
             };
         case EDIT_LOCAL_TODO:
+            
             return {
                 ...state,
                 loading: false,

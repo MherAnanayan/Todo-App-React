@@ -1,14 +1,30 @@
 import React, {useState} from 'react';
 import {addTodoData} from '../store/action/action';
-import { connect } from 'react-redux';
-import { editLocalTodo } from '../store/action/action';
+import {connect} from 'react-redux';
+import {editLocalTodo} from '../store/action/action';
 import './style.scss';
 
-const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArray, myID,editLocalTodo}) => {
-
+const Addtodo = ({
+    onClicked,
+    changeVisibal,
+    loading,
+    title,
+    onClikedin,
+    todoArray,
+    myID,
+    editLocalTodo
+}) => {
+    const newInput = todoArray.filter(el => el.id === myID)[0] || ''
     const [inputValue, setInputValue] = useState({name: '', email: '', title: '', status: false, errors: {}})
-     const changeInput =  todoArray.filter(el=>el.id===myID)[0] || ''
-         console.log(changeInput)
+    const [changeInput, setChangeInput] = useState({
+        name: newInput.name,
+        email: newInput.email,
+        title: newInput.title,
+        status: newInput.status,
+        id: newInput.id,
+        errors: {}
+    })
+
     const onAddTodo = () => {
 
         if (validate()) {
@@ -19,15 +35,10 @@ const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArr
     }
 
     const changemyTodo = () => {
-        
-       editLocalTodo({
-           name:changeInput.name,
-           email:inputValue.email,
-           title:inputValue.title,
-           status: inputValue.status
-       })
+        onClikedin()
+        editLocalTodo(changeInput)
         changeVisibal()
-        
+
     }
     const resetHandler = () => {
         setInputValue({name: '', email: '', title: '', status: false})
@@ -37,45 +48,47 @@ const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArr
         const value = evt.target.type === "checkbox"
             ? evt.target.checked
             : evt.target.value;
-            
-        
-            title === 'Change' ? setInputValue({
+
+        title === 'Change'
+            ? setChangeInput({
                 ...changeInput,
                 [evt.target.name]: value
-            }) : setInputValue({
+            })
+            : setInputValue({
                 ...inputValue,
                 [evt.target.name]: value
-            }) }
-        
+            })
+    }
 
-    
     const validate = () => {
 
         let errors = {};
         let isValid = true;
 
-        if (!inputValue.name || changeInput.name) {
+        if (!inputValue.name) {
             isValid = false;
             errors.name = "Please enter your name.";
         }
 
-        if (!inputValue.email || changeInput.name ) {
+        if (!inputValue.email) {
             isValid = false;
             errors.email = "Please enter your email Address.";
         }
 
-        
-        if (!inputValue.title || changeInput.name ) {
+        if (!inputValue.title) {
             isValid = false;
             errors.title = "Please enter your Todo.";
         }
 
-        title === 'Change' ? setInputValue({
-            ...changeInput,
-            errors: errors
-        }) :setInputValue({ 
-            ...inputValue,
-            errors: errors});
+        title === 'Change'
+            ? setChangeInput({
+                ...changeInput,
+                errors: errors
+            })
+            : setInputValue({
+                ...inputValue,
+                errors: errors
+            });
 
         return isValid;
     }
@@ -90,7 +103,9 @@ const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArr
                     className='input-newtodo'
                     placeholder='Name'
                     onChange={handleChange}
-                    value={title === 'Add'? inputValue.name : changeInput.name }/> {inputValue.errors
+                    value={title === 'Add'
+                    ? inputValue.name
+                    : changeInput.name}/> {inputValue.errors
                     ? <div className="text-danger">{inputValue.errors.name}</div>
                     : null}
                 <input
@@ -98,7 +113,9 @@ const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArr
                     className='input-newtodo'
                     placeholder='Email'
                     onChange={handleChange}
-                    value={title === 'Add' ? inputValue.email : changeInput.email }/> {inputValue.errors
+                    value={title === 'Add'
+                    ? inputValue.email
+                    : changeInput.email}/> {inputValue.errors
                     ? <div className="text-danger">{inputValue.errors.email}</div>
                     : null}
                 <input
@@ -106,7 +123,9 @@ const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArr
                     className='input-newtodo'
                     placeholder='Todo'
                     onChange={handleChange}
-                    value={title === 'Add' ? inputValue.title : changeInput.title }/> {inputValue.errors
+                    value={title === 'Add'
+                    ? inputValue.title
+                    : changeInput.title}/> {inputValue.errors
                     ? <div className="text-danger">{inputValue.errors.title}</div>
                     : null}
                 <div className='status-area'>
@@ -116,7 +135,9 @@ const Addtodo = ({ onClicked, changeVisibal, loading, title, onClikedin, todoArr
                         className='addtodo-chackbox'
                         type='checkbox'
                         onChange={handleChange}
-                        checked={inputValue.status || (changeInput.status==='done'?true:false) || false}/>
+                        checked={inputValue.status || (changeInput.status === 'done'
+                        ? true
+                        : false) || false}/>
                 </div>
                 {title === 'Change'
                     ? <button onClick={changemyTodo} type='button'>{title}</button>

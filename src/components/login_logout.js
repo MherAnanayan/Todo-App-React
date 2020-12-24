@@ -49,9 +49,6 @@ const Login = ({adminLogin}) => {
             const res = await axios.get(`https://todo-app-1ea78-default-rtdb.firebaseio.com/login.json`)
             const adName = Object.entries(res.data).map(el=> el[0]).toString()
             const adPass = Object.entries(res.data).map(el=> el[1]).toString()
-            console.log(res)
-            console.log(adName)
-            console.log(adPass)
             if (namePass.name===adName && namePass.password===adPass) {
                 setVisible(false)
                 setAdmin(true)
@@ -140,7 +137,7 @@ const Login = ({adminLogin}) => {
     )
 }
 
-//const mapStateToProps = (state) => ({ dataValues: state.todos });
+
 
 const mapDispatchToProps = {
     adminLogin
