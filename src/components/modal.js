@@ -5,7 +5,8 @@ import Addtodo from './addToDo';
 
 
 
-const Todomodal = ({onAdd}) => {
+
+const Todomodal = ({onAdd, title}) => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     
@@ -37,10 +38,10 @@ const Todomodal = ({onAdd}) => {
                 onCancel={handleCancel}
                 footer={null} 
             >
-                <Addtodo onClicked={onAdd}  changeVisibal={handleCancel}/>
+                <Addtodo inputValues='' onClicked={onAdd}  changeVisibal={handleCancel} title='Add' />
             </Modal>
             <Button className='addtodo-btn' type="link" onClick={showModal}>
-                    + Add New Todo
+                    {title}
            </Button>
         </>
     );

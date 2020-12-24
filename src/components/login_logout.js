@@ -1,9 +1,12 @@
 import React, {useState} from 'react';
+import axios from 'axios'
 import './style.scss';
 import { Modal, Button } from 'antd';
+import {adminLogin} from '../store/action/action';
+import { connect } from 'react-redux';
 
-const Login = (props) => {
-    const [namePass, setNamePass] = useState({name: 'admin', password: '123'})
+const Login = ({adminLogin}) => {
+    const [namePass, setNamePass] = useState({name: 'admin', password: '123',errors:{}})
     const [admin, setAdmin] = useState(false)
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -37,17 +40,29 @@ const Login = (props) => {
     }
     const tryLogout = () => {
         setAdmin(false)
+        adminLogin('none')
     }
 
 
-    const tryLogin = () => {
+    const tryLogin = async () => {
         if (validate()) {
-            setVisible(false)
-            setAdmin(true)
+            const res = await axios.get(`https://todo-app-1ea78-default-rtdb.firebaseio.com/login.json`)
+            const adName = Object.entries(res.data).map(el=> el[0]).toString()
+            const adPass = Object.entries(res.data).map(el=> el[1]).toString()
+            console.log(res)
+            console.log(adName)
+            console.log(adPass)
+            if (namePass.name===adName && namePass.password===adPass) {
+                setVisible(false)
+                setAdmin(true)
+                adminLogin('')
+            }
+           else return
+           
         }
     }
     
-
+   
    
 
     const validate = () => {
@@ -63,6 +78,10 @@ const Login = (props) => {
             isValid = false;
             errors.password = "Please enter your password.";
         }
+        setNamePass({
+            ...namePass,
+            errors: errors
+        });
         return isValid;
     }
 
@@ -80,7 +99,7 @@ const Login = (props) => {
             </div>
         )
     }
-
+    
     
 
     return (
@@ -102,7 +121,7 @@ const Login = (props) => {
                             className='input-newtodo'
                             placeholder='Name'
                             onChange={handleChange}
-                            value={namePass.name || ''} />
+                            value={namePass.name} />
                         {namePass.errors ? <div className="text-danger">{namePass.errors.name}</div> : null}
                         <input
                             name='password'
@@ -110,7 +129,7 @@ const Login = (props) => {
                             className='input-newtodo'
                             placeholder='password'
                             onChange={handleChange}
-                            value={namePass.password || ''} />
+                            value={namePass.password} />
                         {namePass.errors ? <div className="text-danger">{namePass.errors.email}</div> : null}
                         <Button onClick={tryLogin}>вход</Button>
                     </form>
@@ -121,4 +140,10 @@ const Login = (props) => {
     )
 }
 
-    export default Login;
+//const mapStateToProps = (state) => ({ dataValues: state.todos });
+
+const mapDispatchToProps = {
+    adminLogin
+}
+
+export default connect(null, mapDispatchToProps)(Login);
